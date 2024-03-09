@@ -5,6 +5,12 @@
   background-position: center;
 }
 
+.navTab {
+  padding-left: 15px;
+  text-decoration: none;
+  color: gray;
+}
+
 .App {
   text-align: center;
 }
