@@ -6,6 +6,7 @@ import { useState } from "react";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./pages/Detail.js";
+import Event from "./pages/Event.js";
 
 function App() {
   let [shoes, setShoes] = useState(data);
@@ -75,13 +76,20 @@ function App() {
             </>
           }
         />
-        <Route path="/detail" element={<Detail />} />
+        {/* url 파라미터. 여러개 가능 */}
+        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
 
         {/* nested routes */}
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>멤버임</div>} />
           <Route path="location" element={<div>위치정보임</div>} />
         </Route>
+
+         {/* nested routes */}
+         <Route path="/event" element={<Event />}>
+          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
+          <Route path="two" element={<dive>생일기념 쿠폰받기</dive>}></Route>
+         </Route>
 
         <Route path="*" element={<div>없는 페이지</div>} />
       </Routes>
@@ -99,9 +107,10 @@ function About() {
 }
 
 function Card(props) {
+  let navigate = useNavigate();
   return (
     <div className="col-md-4">
-      <img src={props.img} width="80%" />
+      <img src={props.img} width="80%" onClick={() => { var num= props.shoes.id; console.log(num); navigate("/detail/" + num) }}/>
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}원</p>
     </div>
