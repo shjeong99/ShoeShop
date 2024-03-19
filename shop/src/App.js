@@ -2,15 +2,21 @@
 import "./App.css";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import LogoImg from "./img/bg.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./pages/Detail.js";
 import Event from "./pages/Event.js";
+import axios from "axios";
 
 function App() {
   let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+  let [moreCnt, setMoreCnt] = useState(0); //더보기 버튼 클릭 횟수
+
+  useEffect(()=>{
+    console.log(shoes);
+  }, [shoes])
 
   return (
     <div className="App">
@@ -72,6 +78,35 @@ function App() {
                     );
                   })}
                 </div>
+                <div style={{background : '#808080a1', display:'none'}} id="loadingBar">로딩중입니다.. </div>
+                <button onClick={(e)=>{
+                  document.getElementById('loadingBar').style.display = '';
+                  if(moreCnt >= 2){
+                    document.getElementById('loadingBar').style.display = 'none';
+                    e.target.style.display ='none';
+                  }else{
+                    let url = '';
+                    if(moreCnt == 0){ //0
+                      url = 'https://codingapple1.github.io/shop/data2.json';
+                    }else{ //1
+                      url = 'https://codingapple1.github.io/shop/data3.json';
+                    }
+                    axios.get(url)
+                    .then((res)=>{ //성공
+                      document.getElementById('loadingBar').style.display = 'none';
+                      let data = res.data;
+                      let tempShoes = [...shoes];
+                      let newArr = tempShoes.concat(data);
+                      setShoes(newArr);
+                      moreCnt++;
+                      setMoreCnt(moreCnt);
+                    })
+                    .catch((res)=>{ //실패
+                      document.getElementById('loadingBar').style.display = 'none';
+                      console.log(res);
+                    })
+                  }
+                  }}>더보기</button>
               </div>
             </>
           }

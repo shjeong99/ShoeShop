@@ -7,6 +7,7 @@ function Detail(props) {
 
   let [alertYN, setAlertYN] = useState(true); 
   let [count, setCount] = useState(0);
+  let [inpVal, setInpVal] = useState("");
   
   let {id} = useParams();
   let shoesOne = props.shoes.find((val) => val.id == id);
@@ -25,9 +26,11 @@ function Detail(props) {
   }, [count]); //[]를 넣으면 []안에 state가 변할때마다 실행됨.(mount될때, 혹은 []안 state가 update될때)
               // []안에 아무것도 없으면 mount될때만 실행됨.
 
-  let [inpVal, setInpVal] = useState("");
   useEffect(()=>{
-    setInpVal("");
+    if(isNaN(inpVal)){
+      alert("숫자만 입력가능합니다!");
+      setInpVal("");
+    }
   }, [inpVal]);
   return (
     <div className="container">
@@ -49,17 +52,8 @@ function Detail(props) {
           />
         </div>
         <div style={{textAlign:"center"}}>
-          <input type="tel" style={{width:"100px", textAlign:"center"}} onChange={(e)=>{
-            var inpVal = e.target.value;
-            var replaceNotInt = /[^0-9]/gi; // 숫자가 아닌 정규식
-            console.log(this);
-            console.log()
-            if (inpVal.match(replaceNotInt)) {
-              alert("숫자만 입력 가능합니다");
-              // val.replace(replaceNotInt, "");
-              setInpVal("");
-              e.target.value = "";
-            }
+          <input type="tel" style={{width:"100px", textAlign:"center"}}
+            onChange={(e)=>{ setInpVal(e.target.value);
           }}></input>
         </div>
         <div className="col-md-6">
