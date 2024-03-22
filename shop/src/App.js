@@ -64,7 +64,7 @@ function App() {
             <h4>{shoes[0].title}</h4>
             <p>{shoes[0].price}</p>
           </div> */}
-                  {shoes.map(function (val, idx) {
+                  {shoes ? shoes.map(function (val, idx) {
                     return (
                       <Card
                         shoes={shoes[idx]}
@@ -76,7 +76,7 @@ function App() {
                         key={idx}
                       />
                     );
-                  })}
+                  }) : null}
                 </div>
                 <div style={{background : '#808080a1', display:'none'}} id="loadingBar">로딩중입니다.. </div>
                 <button onClick={(e)=>{

@@ -1,7 +1,9 @@
 /* eslint-disable */ //warning 없애기
+import "../../src/App.css";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // import styled from "styled-components";
+import { Nav } from "react-bootstrap";
 
 function Detail(props) {
 
@@ -11,6 +13,9 @@ function Detail(props) {
   
   let {id} = useParams();
   let shoesOne = props.shoes.find((val) => val.id == id);
+
+  let [tab, setTab] = useState(0);
+  let [fade, setFade] = useState('');
 
   useEffect(()=>{ //mount, update시 코드 실행해주는 useEffect (근데 useEffect에 굳이 안넣어도 똑같음)
     //다른점. useEffect 안에 있는 코드는 html 렌더링 후에 동작함
@@ -32,8 +37,17 @@ function Detail(props) {
       setInpVal("");
     }
   }, [inpVal]);
+
+  useEffect(()=>{ //mount될때 애니메이션 실행
+    let timer2 = setTimeout(() => { setFade('end') });
+
+    return ()=>{
+      setFade('');
+    }
+  }, []);
+  
   return (
-    <div className="container">
+    <div className={`container start ${fade}`}>
       {
         alertYN == true ? 
           <div className="alert alert-warning">
@@ -41,8 +55,8 @@ function Detail(props) {
           </div> 
           : null
       }
-      {count}
-      <button onClick={()=>{ setCount(count+1)}}>버튼</button>
+      {/* {count}
+      <button onClick={()=>{ setCount(count+1)}}>버튼</button> */}
       <div className="row">
         <div className="col-md-6">
           <img
@@ -52,9 +66,9 @@ function Detail(props) {
           />
         </div>
         <div style={{textAlign:"center"}}>
-          <input type="tel" style={{width:"100px", textAlign:"center"}}
+          {/* <input type="tel" style={{width:"100px", textAlign:"center"}}
             onChange={(e)=>{ setInpVal(e.target.value);
-          }}></input>
+          }}></input> */}
         </div>
         <div className="col-md-6">
           <h4 className="pt-5">{shoesOne.title}</h4>
@@ -63,8 +77,51 @@ function Detail(props) {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+      <br/>
+      {/* defaultActiveKey 기본으로 눌려있을 버튼 */}
+      <Nav variant="tabs"  defaultActiveKey="link0"> 
+        <Nav.Item>
+          <Nav.Link eventKey="link0" onClick={() => { setTab(0);}}>버튼0</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link1" onClick={() => { setTab(1);}}>버튼1</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link2" onClick={() => { setTab(2);}}>버튼2</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent tab={tab}/>
+
     </div>
   );
+}
+
+// props.~ 가 귀찮으면 {변수}
+function TabContent({tab}){
+
+  let [fade, setFade] = useState('');
+
+  useEffect(() => {
+    let timer = setTimeout(()=>{ setFade('end') }, 500);
+    
+    return ()=>{
+      clearTimeout(timer);
+      setFade('');
+    }
+  }, [tab])
+  // if(tab == 0){
+  //   return <div>내용0</div>
+  // }else if(tab == 1){
+  //   return <div>내용1</div>
+  // }else if(tab == 2){
+  //   return <div>내용2</div>
+  // }
+  //굳이 if문 안써도 됨. 아래로 축약
+  var arr = [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>];
+
+  return (<div className={`start ${fade}`}> 
+      { arr[tab] }
+    </div>);
 }
 
 export default Detail;
