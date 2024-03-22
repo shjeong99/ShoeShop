@@ -2,15 +2,20 @@
 import "./App.css";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import LogoImg from "./img/bg.png";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./pages/Detail.js";
 import Event from "./pages/Event.js";
 import axios from "axios";
 
+let Context1 = createContext();
+export {Context1};
+
 function App() {
   let [shoes, setShoes] = useState(data);
+  let [stock, setStock] = useState([10, 11, 12]); //재고
+
   let navigate = useNavigate();
   let [moreCnt, setMoreCnt] = useState(0); //더보기 버튼 클릭 횟수
 
@@ -19,7 +24,7 @@ function App() {
   }, [shoes])
 
   return (
-    <div className="App">
+    <div className="App"> 
       <Navbar bg="light" data-bs-theme="light">
         <Container>
           <Navbar.Brand href="#home">ShoeShop</Navbar.Brand>
@@ -112,7 +117,11 @@ function App() {
           }
         />
         {/* url 파라미터. 여러개 가능 */}
-        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
+        <Route path="/detail/:id" element={
+          <Context1.Provider value={{ stock, shoes }}>
+            <Detail shoes={shoes}/>
+          </Context1.Provider>
+        } />
 
         {/* nested routes */}
         <Route path="/about" element={<About />}>

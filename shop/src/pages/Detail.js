@@ -1,11 +1,15 @@
 /* eslint-disable */ //warning 없애기
 import "../../src/App.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 // import styled from "styled-components";
 import { Nav } from "react-bootstrap";
+import { Context1 } from "../../src/App.js";
 
 function Detail(props) {
+
+  let {stock, shoes} = useContext(Context1);
+  console.log(stock);
 
   let [alertYN, setAlertYN] = useState(true); 
   let [count, setCount] = useState(0);
@@ -42,6 +46,7 @@ function Detail(props) {
     let timer2 = setTimeout(() => { setFade('end') });
 
     return ()=>{
+      clearTimeout(timer2);
       setFade('');
     }
   }, []);
@@ -90,16 +95,17 @@ function Detail(props) {
           <Nav.Link eventKey="link2" onClick={() => { setTab(2);}}>버튼2</Nav.Link>
         </Nav.Item>
       </Nav>
-      <TabContent tab={tab}/>
+      <TabContent tab={tab} shoes={props.shoes}/>
 
     </div>
   );
 }
 
 // props.~ 가 귀찮으면 {변수}
-function TabContent({tab}){
-
+function TabContent({tab, shoes}){
   let [fade, setFade] = useState('');
+  let {stock} = useContext(Context1);
+  console.log(stock);
 
   useEffect(() => {
     let timer = setTimeout(()=>{ setFade('end') }, 500);
@@ -117,9 +123,9 @@ function TabContent({tab}){
   //   return <div>내용2</div>
   // }
   //굳이 if문 안써도 됨. 아래로 축약
-  var arr = [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>];
+  var arr = [<div>{shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div>];
 
-  return (<div className={`start ${fade}`}> 
+  return (<div className={`start ${fade}`}>
       { arr[tab] }
     </div>);
 }
