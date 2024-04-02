@@ -8,6 +8,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import Detail from "./pages/Detail.js";
 import Event from "./pages/Event.js";
 import axios from "axios";
+import Cart from "./pages/Cart.js";
 
 let Context1 = createContext();
 export {Context1};
@@ -20,7 +21,6 @@ function App() {
   let [moreCnt, setMoreCnt] = useState(0); //더보기 버튼 클릭 횟수
 
   useEffect(()=>{
-    console.log(shoes);
   }, [shoes])
 
   return (
@@ -38,7 +38,7 @@ function App() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
-                navigate("/detail");
+                navigate("/cart");
               }}
             >
               Cart
@@ -108,7 +108,6 @@ function App() {
                     })
                     .catch((res)=>{ //실패
                       document.getElementById('loadingBar').style.display = 'none';
-                      console.log(res);
                     })
                   }
                   }}>더보기</button>
@@ -122,6 +121,8 @@ function App() {
             <Detail shoes={shoes}/>
           </Context1.Provider>
         } />
+
+        <Route path="/cart" element={ <Cart/> } /> 
 
         {/* nested routes */}
         <Route path="/about" element={<About />}>
@@ -154,7 +155,7 @@ function Card(props) {
   let navigate = useNavigate();
   return (
     <div className="col-md-4">
-      <img src={props.img} width="80%" onClick={() => { var num= props.shoes.id; console.log(num); navigate("/detail/" + num) }}/>
+      <img src={props.img} width="80%" onClick={() => { var num= props.shoes.id; navigate("/detail/" + num) }}/>
       <h4>{props.shoes.title}</h4>
       <p>{props.shoes.price}원</p>
     </div>
