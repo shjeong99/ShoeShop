@@ -1,21 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit'
-
-
-//state 하나를 slice라고 부름
-let user = createSlice({
-    name : 'user', //이름
-    initialState: { name : 'kim', age : 20 } , //값
-    reducers : {
-      changeName(state){
-        return { name : 'park', age : 20 } 
-      },
-      chan2(){
-
-      }
-    }
-})
-
-export let {changeName, chan2} = user.actions;
+import user from './store/userSlice';
 
 let stock = createSlice({
     name : 'stock',
@@ -29,13 +13,29 @@ let cartData = createSlice({
       {id : 2, name : 'Grey Yordan', count : 1}
     ],
     reducers : {
-      changeCnt(state){
-        return state.conunt++;
+      changeCnt(state, action){
+        var num = state.findIndex((val)=> val.id === action.payload);
+        state[num].count ++;
+      },
+      changeList(state, action){
+        var num = state.findIndex((val)=> val.id === action.payload.id);
+        if(num > -1){
+          state[num].count++;
+        }else{
+          state.push(action.payload);
+        }
+      },
+      deleteList(state, action){
+        var num = state.findIndex((val)=> val.id === action.payload);
+        if(num > -1 ){
+          state.splice(num, 1);
+        }
+        return state;
       }
     }
 })
 
-export let {changeCnt} = cartData.actions;
+export let { changeCnt, changeList, deleteList } = cartData.actions;
 
 export default configureStore({
   reducer: {

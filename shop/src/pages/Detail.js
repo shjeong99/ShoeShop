@@ -1,15 +1,20 @@
 /* eslint-disable */ //warning 없애기
 import "../../src/App.css";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 // import styled from "styled-components";
 import { Nav } from "react-bootstrap";
 import { Context1 } from "../../src/App.js";
+import { changeList } from "../../src/store.js";
+import { useSelector, useDispatch } from "react-redux";
 
 function Detail(props) {
 
+  let cartData = useSelector((state) => state);
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+
   let {stock, shoes} = useContext(Context1);
-  console.log(stock);
 
   let [alertYN, setAlertYN] = useState(true); 
   let [count, setCount] = useState(0);
@@ -28,7 +33,6 @@ function Detail(props) {
 
     return () => { //useEffect 동작 전에 실행됨
       clearTimeout(timer);
-      console.log(1);
       //clean up function은 mount시 실행 안됨,
       //unmount시 실행됨
     }
@@ -79,7 +83,12 @@ function Detail(props) {
           <h4 className="pt-5">{shoesOne.title}</h4>
           <p>{shoesOne.content}</p>
           <p>{shoesOne.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button className="btn btn-danger" onClick={() => {
+            console.log(shoesOne);
+            var obj = {id : shoesOne.id , name : shoesOne.title, count : 1};
+            dispatch( changeList(obj));
+            navigate("/cart");
+          }}>주문하기</button>
         </div>
       </div>
       <br/>
@@ -105,7 +114,6 @@ function Detail(props) {
 function TabContent({tab, shoes}){
   let [fade, setFade] = useState('');
   let {stock} = useContext(Context1);
-  console.log(stock);
 
   useEffect(() => {
     let timer = setTimeout(()=>{ setFade('end') }, 500);
