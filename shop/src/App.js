@@ -26,7 +26,24 @@ function App() {
   let navigate = useNavigate();
   let [moreCnt, setMoreCnt] = useState(0); //더보기 버튼 클릭 횟수
 
+  let watchedData = JSON.parse(localStorage.getItem('watched'));
+   
+    let reverse = watchedData.reverse();
+    let set = new Set(reverse);
+    let uniqueArr = [...set];
+    console.log(uniqueArr);
+
+    var titleArr = [];
+    //상품명만 모으기
+    for(var i = 0; i < uniqueArr.length; i++){
+      var title = shoes[uniqueArr[i]].title;
+      titleArr.push(title);
+    }
+
+    console.log(titleArr);  
+
   useEffect(()=>{
+  
   }, [shoes])
 
   return (
@@ -69,8 +86,14 @@ function App() {
                 style={{ backgroundImage: "url(" + LogoImg + ")" }}
               ></div>
               <div>최근 본 상품
-                <br/>11
-                
+                <br/>
+                {
+                  titleArr.map((val)=>{
+                    return(
+                      <div key={val}> <span>{val}</span> </div>
+                      );
+                    })
+                }
               </div>
               <div className="container">
                 <div className="row">
