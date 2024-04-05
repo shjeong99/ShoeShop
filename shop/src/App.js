@@ -14,6 +14,12 @@ let Context1 = createContext();
 export {Context1};
 
 function App() {
+
+  let obj = {name: 'kim'}
+  localStorage.setItem('data', JSON.stringify(obj));
+  let tempData = localStorage.getItem('data');
+  console.log(JSON.parse(tempData).name);
+
   let [shoes, setShoes] = useState(data);
   let [stock, setStock] = useState([10, 11, 12]); //재고
 
@@ -62,6 +68,10 @@ function App() {
                 className="main-bg"
                 style={{ backgroundImage: "url(" + LogoImg + ")" }}
               ></div>
+              <div>최근 본 상품
+                <br/>11
+                
+              </div>
               <div className="container">
                 <div className="row">
                   {/* <div className="col-md-4">

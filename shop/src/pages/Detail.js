@@ -9,7 +9,6 @@ import { changeList } from "../../src/store.js";
 import { useSelector, useDispatch } from "react-redux";
 
 function Detail(props) {
-
   let cartData = useSelector((state) => state);
   let dispatch = useDispatch();
   let navigate = useNavigate();
@@ -22,6 +21,19 @@ function Detail(props) {
   
   let {id} = useParams();
   let shoesOne = props.shoes.find((val) => val.id == id);
+
+  //최근 조회한 상품 localStorage
+  useEffect(()=>{
+    let temp = localStorage.getItem('watched');
+    if(temp){
+      var arr = JSON.parse(temp)
+    }else{
+      var arr = [];
+    }
+    arr.push(shoesOne.id);
+    localStorage.setItem('watched', JSON.stringify(arr));
+  }, []);
+
 
   let [tab, setTab] = useState(0);
   let [fade, setFade] = useState('');
