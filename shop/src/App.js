@@ -2,13 +2,17 @@
 import "./App.css";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import LogoImg from "./img/bg.png";
-import { createContext, useEffect, useState } from "react";
+import { createContext, lazy, Suspense, useEffect, useState } from "react";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
-import Detail from "./pages/Detail.js";
 import Event from "./pages/Event.js";
 import axios from "axios";
-import Cart from "./pages/Cart.js";
+
+
+// import Detail from "./pages/Detail.js";
+// import Cart from "./pages/Cart.js";
+const Detail = lazy( () => import('./pages/Detail.js') ) //"Detail 컴포넌트가 필요해지면 import 해주세요" 라는 뜻
+const Cart = lazy( () => import('./pages/Cart.js') )
 
 let Context1 = createContext();
 export {Context1};
@@ -153,12 +157,15 @@ function App() {
         />
         {/* url 파라미터. 여러개 가능 */}
         <Route path="/detail/:id" element={
-          <Context1.Provider value={{ stock, shoes }}>
-            <Detail shoes={shoes}/>
-          </Context1.Provider>
+          <Suspense fallback={<div>로딩중임</div>}>
+            <Context1.Provider value={{ stock, shoes }}>
+              <Detail shoes={shoes}/>
+            </Context1.Provider>
+          </Suspense>
         } />
 
-        <Route path="/cart" element={ <Cart/> } /> 
+        <Route path="/cart" element={ <Suspense fallback={<div>로딩중임</div>}> <Cart/> </Suspense> } 
+        /> 
 
         {/* nested routes */}
         <Route path="/about" element={<About />}>
