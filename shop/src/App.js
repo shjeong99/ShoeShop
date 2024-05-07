@@ -15,6 +15,12 @@ export {Context1};
 
 function App() {
 
+  useEffect(()=>{
+    if(!localStorage.getItem('watched')){
+      localStorage.setItem('watched', JSON.stringify([]));
+    } 
+  }, [])
+
   let obj = {name: 'kim'}
   localStorage.setItem('data', JSON.stringify(obj));
   let tempData = localStorage.getItem('data');
@@ -26,11 +32,12 @@ function App() {
   let navigate = useNavigate();
   let [moreCnt, setMoreCnt] = useState(0); //더보기 버튼 클릭 횟수
 
-  let watchedData = JSON.parse(localStorage.getItem('watched'));
+  let watchedData = JSON.parse(localStorage.getItem('watched')) || [];
    
     let reverse = watchedData.reverse();
-    let set = new Set(reverse);
-    let uniqueArr = [...set];
+    // let set = new Set(reverse);
+    // let uniqueArr = [...set];
+    let uniqueArr = reverse;
     console.log(uniqueArr);
 
     var titleArr = [];
@@ -41,10 +48,6 @@ function App() {
     }
 
     console.log(titleArr);  
-
-  useEffect(()=>{
-  
-  }, [shoes])
 
   return (
     <div className="App"> 

@@ -31,6 +31,8 @@ function Detail(props) {
       var arr = [];
     }
     arr.push(shoesOne.id);
+    arr = new Set(arr);
+    arr = Array.from(arr);
     localStorage.setItem('watched', JSON.stringify(arr));
   }, []);
 
